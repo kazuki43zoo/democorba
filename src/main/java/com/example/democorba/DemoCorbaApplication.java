@@ -44,21 +44,22 @@ public class DemoCorbaApplication {
         LOGGER.info(new String(responseDataHolder.value, StandardCharsets.UTF_8));
     }
 
+    @Bean(destroyMethod = "destroy")
+    ORB orb() {
+        return ORB.init(new String[]{}, null);
+    }
+
     @Bean
-    JndiRmiProxyFactoryBean greetingServiceViaNamingService() {
+    JndiRmiProxyFactoryBean greetingServiceViaNamingService(ORB orb) {
         JndiRmiProxyFactoryBean factoryBean = new JndiRmiProxyFactoryBean();
         Properties properties = new Properties();
         properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.cosnaming.CNCtxFactory");
         properties.setProperty(Context.PROVIDER_URL, "iiop://localhost:1050");
+        properties.put("java.naming.corba.orb", orb);
         factoryBean.setJndiEnvironment(properties);
         factoryBean.setJndiName("GreetingService");
         factoryBean.setServiceInterface(GreetingService.class);
         return factoryBean;
-    }
-
-    @Bean
-    ORB orb() {
-        return ORB.init(new String[]{}, null);
     }
 
     @Bean

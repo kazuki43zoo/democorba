@@ -6,7 +6,9 @@ import com.example.democorba.service.GreetingServiceHelper;
 import com.example.democorba.service.GreetingServiceOperations;
 import com.example.democorba.support.IorFileSupport;
 import org.hamcrest.core.Is;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
@@ -27,10 +29,22 @@ public class GreetingTest {
 
     private static final IorFileSupport IOR_FILE_SUPPORT = new IorFileSupport();
 
+    private static ORB orb;
+
+    @BeforeClass
+    public static void setupOrb() {
+        orb = ORB.init(ORB_OPTIONS, null);
+    }
+
+    @AfterClass
+    public static void destroyOrb() {
+        if (orb != null) {
+            orb.destroy();
+        }
+    }
+
     @Test
     public void testUsingNamingService() throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound {
-        ORB orb = ORB.init(ORB_OPTIONS, null);
-
         org.omg.CORBA.Object nameServiceRef =
                 orb.resolve_initial_references("NameService");
         NamingContextExt namingContextRef = NamingContextExtHelper.narrow(nameServiceRef);
@@ -54,7 +68,6 @@ public class GreetingTest {
 
     @Test
     public void testUsingIorFile() {
-        ORB orb = ORB.init(new String[]{}, null);
         String ior = IOR_FILE_SUPPORT.read();
         GreetingServiceOperations greetingService = GreetingServiceHelper.narrow(orb.string_to_object(ior));
 
