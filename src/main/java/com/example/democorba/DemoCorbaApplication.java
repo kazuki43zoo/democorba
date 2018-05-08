@@ -72,7 +72,7 @@ public class DemoCorbaApplication {
     }
 
     @Bean
-    GreetingService greetingServiceViaIorFile(ORB orb) {
+    GreetingServiceOperations greetingServiceViaIorFile(ORB orb) {
         String ior = new IorFileSupport().read();
         return GreetingServiceHelper.narrow(orb.string_to_object(ior));
     }
