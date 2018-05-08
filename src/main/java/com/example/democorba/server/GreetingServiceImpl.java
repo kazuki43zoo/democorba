@@ -1,7 +1,7 @@
 package com.example.democorba.server;
 
 import com.example.democorba.service.BytesDataHolder;
-import com.example.democorba.service.GreetingServicePOA;
+import com.example.democorba.service.GreetingServiceOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public class GreetingServiceImpl extends GreetingServicePOA {
+public class GreetingServiceImpl implements GreetingServiceOperations {
 
     private static final Charset CHARSET = StandardCharsets.UTF_8;
     private static final Logger LOGGER = LoggerFactory.getLogger(GreetingServiceImpl.class);

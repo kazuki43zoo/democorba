@@ -2,17 +2,20 @@ package com.example.democorba.service;
 
 
 /**
-* com/example/democorba/service/GreetingServicePOA.java .
+* com/example/democorba/service/_GreetingServiceImplBase.java .
 * IDL-to-Javaコンパイラ(ポータブル)、バージョン"3.2"によって生成されました
-* src/main/resources/GreetingService.idlから
-* 2018年5月8日 20時49分23秒 JST
+* /Users/shimizukazuki/git-me/democorba/src/main/resources/GreetingService.idlから
+* 2018年5月8日 22時51分33秒 JST
 */
 
-public abstract class GreetingServicePOA extends org.omg.PortableServer.Servant
- implements com.example.democorba.service.GreetingServiceOperations, org.omg.CORBA.portable.InvokeHandler
+public abstract class _GreetingServiceImplBase extends org.omg.CORBA.portable.ObjectImpl
+                implements com.example.democorba.service.GreetingService, org.omg.CORBA.portable.InvokeHandler
 {
 
   // Constructors
+  public _GreetingServiceImplBase ()
+  {
+  }
 
   private static java.util.Hashtable _methods = new java.util.Hashtable ();
   static
@@ -63,22 +66,10 @@ public abstract class GreetingServicePOA extends org.omg.PortableServer.Servant
   private static String[] __ids = {
     "IDL:com/example/democorba/service/GreetingService:1.0"};
 
-  public String[] _all_interfaces (org.omg.PortableServer.POA poa, byte[] objectId)
+  public String[] _ids ()
   {
     return (String[])__ids.clone ();
   }
 
-  public GreetingService _this() 
-  {
-    return GreetingServiceHelper.narrow(
-    super._this_object());
-  }
 
-  public GreetingService _this(org.omg.CORBA.ORB orb) 
-  {
-    return GreetingServiceHelper.narrow(
-    super._this_object(orb));
-  }
-
-
-} // class GreetingServicePOA
+} // class _GreetingServiceImplBase

@@ -1,5 +1,6 @@
 package com.example.democorba.server;
 
+import com.example.democorba.service.GreetingService_Tie;
 import com.example.democorba.support.IorFileSupport;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
@@ -49,20 +50,16 @@ public class GreetingServer {
 
     private static void bindService(String[] options) throws InvalidName, AdapterInactive, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed, IOException {
         ORB orb = ORB.init(options, null);
-
         POA poa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
         poa.the_POAManager().activate();
 
-        GreetingServiceImpl greetingService = new GreetingServiceImpl();
-        org.omg.CORBA.Object greetingServiceRef = poa.servant_to_reference(greetingService);
+        GreetingService_Tie greetingServiceTie = new GreetingService_Tie(new GreetingServiceImpl());
 
-        org.omg.CORBA.Object namingServiceRef =
-                orb.resolve_initial_references("NameService");
-        NamingContextExt namingContextRef = NamingContextExtHelper.narrow(namingServiceRef);
-        NameComponent path[] = namingContextRef.to_name("GreetingService");
-        namingContextRef.rebind(path, greetingServiceRef);
+        NamingContextExt namingContextRef =
+                NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
+        namingContextRef.rebind(namingContextRef.to_name("GreetingService"), greetingServiceTie);
 
-        String ior = orb.object_to_string(greetingServiceRef);
+        String ior = orb.object_to_string(greetingServiceTie);
         IOR_FILE_SUPPORT.write(ior);
 
         System.out.println("GreetingService IOR: " + ior);

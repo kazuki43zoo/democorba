@@ -4,8 +4,8 @@ package com.example.democorba.service;
 /**
 * com/example/democorba/service/_GreetingServiceStub.java .
 * IDL-to-Javaコンパイラ(ポータブル)、バージョン"3.2"によって生成されました
-* src/main/resources/GreetingService.idlから
-* 2018年5月8日 20時49分23秒 JST
+* /Users/shimizukazuki/git-me/democorba/src/main/resources/GreetingService.idlから
+* 2018年5月8日 22時51分33秒 JST
 */
 
 public class _GreetingServiceStub extends org.omg.CORBA.portable.ObjectImpl implements com.example.democorba.service.GreetingService
