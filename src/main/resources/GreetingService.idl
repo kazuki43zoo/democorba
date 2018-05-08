@@ -1,0 +1,19 @@
+/**
+ * rm -rf src/main/generated_java/com/example/democorba/service
+ * idlj -fall -td src/main/generated_java src/main/resources/GreetingService.idl
+ */
+
+module com {
+  module example {
+    module democorba {
+        module service {
+          typedef sequence<octet> BytesData;
+          interface GreetingService
+          {
+            string hello(in string message);
+            void execute(in BytesData request, out BytesData response);
+          };
+        };
+    };
+  };
+};
