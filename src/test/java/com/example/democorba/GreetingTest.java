@@ -6,7 +6,9 @@ import com.example.democorba.service.GreetingServiceHelper;
 import com.example.democorba.service.GreetingServiceOperations;
 import com.example.democorba.support.IorFileSupport;
 import org.hamcrest.core.Is;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
@@ -18,18 +20,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class GreetingTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoCorbaApplication.class);
 
-    private static final String[] ORB_OPTIONS = new String[]{"-ORBInitialPort", "1050", "-ORBInitialHost", "localhost"};
+    private static final String[] ORB_OPTIONS = new String[]{"-ORBInitRef", "NameService=corbaloc:iiop:localhost:1050/NameService"};
 
     private static final IorFileSupport IOR_FILE_SUPPORT = new IorFileSupport();
 
+    private static ORB orb;
+
+    @BeforeClass
+    public static void setupOrb() {
+        Properties properties = new Properties();
+        properties.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
+        orb = ORB.init(ORB_OPTIONS, properties);
+    }
+
+    @AfterClass
+    public static void destroyOrb() {
+        if (orb != null) {
+            orb.destroy();
+        }
+    }
+
     @Test
     public void testUsingNamingService() throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound {
-        ORB orb = ORB.init(ORB_OPTIONS, null);
 
         org.omg.CORBA.Object nameServiceRef =
                 orb.resolve_initial_references("NameService");
@@ -54,7 +72,7 @@ public class GreetingTest {
 
     @Test
     public void testUsingIorFile() {
-        ORB orb = ORB.init(new String[]{}, null);
+
         String ior = IOR_FILE_SUPPORT.read();
         GreetingServiceOperations greetingService = GreetingServiceHelper.narrow(orb.string_to_object(ior));
 

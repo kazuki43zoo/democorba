@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.remoting.rmi.JndiRmiProxyFactoryBean;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
@@ -33,7 +34,7 @@ public class DemoCorbaApplication {
     }
 
     @Bean
-    CommandLineRunner demoUsingIorFile(GreetingService greetingServiceViaIorFile) {
+    CommandLineRunner demoUsingIorFile(GreetingServiceOperations greetingServiceViaIorFile) {
         return args -> callService(greetingServiceViaIorFile);
     }
 
@@ -44,21 +45,30 @@ public class DemoCorbaApplication {
         LOGGER.info(new String(responseDataHolder.value, StandardCharsets.UTF_8));
     }
 
-    @Bean
-    JndiRmiProxyFactoryBean greetingServiceViaNamingService() {
-        JndiRmiProxyFactoryBean factoryBean = new JndiRmiProxyFactoryBean();
+    @Bean(destroyMethod = "destroy")
+    ORB orb() {
         Properties properties = new Properties();
-        properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.cosnaming.CNCtxFactory");
-        properties.setProperty(Context.PROVIDER_URL, "iiop://localhost:1050");
-        factoryBean.setJndiEnvironment(properties);
-        factoryBean.setJndiName("GreetingService");
-        factoryBean.setServiceInterface(GreetingService.class);
-        return factoryBean;
+        properties.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
+        return ORB.init(new String[]{}, properties);
     }
 
     @Bean
-    ORB orb() {
-        return ORB.init(new String[]{}, null);
+    JndiRmiProxyFactoryBean greetingServiceViaNamingService(ORB orb) {
+        JndiRmiProxyFactoryBean factoryBean = new JndiRmiProxyFactoryBean() {
+            @Override
+            protected Object lookup() throws NamingException {
+                org.omg.CORBA.Object object = (org.omg.CORBA.Object) super.lookup();
+                return GreetingServiceHelper.narrow(object);
+            }
+        };
+        Properties properties = new Properties();
+        properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.cosnaming.CNCtxFactory");
+        properties.setProperty(Context.PROVIDER_URL, "iiop://localhost:1050");
+        properties.put("java.naming.corba.orb", orb);
+        factoryBean.setJndiEnvironment(properties);
+        factoryBean.setJndiName("GreetingService");
+        factoryBean.setServiceInterface(GreetingServiceOperations.class);
+        return factoryBean;
     }
 
     @Bean

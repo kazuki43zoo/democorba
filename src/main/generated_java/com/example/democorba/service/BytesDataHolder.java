@@ -1,39 +1,34 @@
 package com.example.democorba.service;
 
-
 /**
-* com/example/democorba/service/BytesDataHolder.java .
-* IDL-to-Javaコンパイラ(ポータブル)、バージョン"3.2"によって生成されました
-* /Users/shimizukazuki/git-me/democorba/src/main/resources/GreetingService.idlから
-* 2018年5月8日 22時51分33秒 JST
-*/
+ * Generated from IDL alias "BytesData".
+ *
+ * @author JacORB IDL compiler V 3.9
+ * @version generated at 2018/05/08 23:09:57
+ */
 
-public final class BytesDataHolder implements org.omg.CORBA.portable.Streamable
+public final class BytesDataHolder
+	implements org.omg.CORBA.portable.Streamable
 {
-  public byte value[] = null;
+	public byte[] value;
 
-  public BytesDataHolder ()
-  {
-  }
-
-  public BytesDataHolder (byte[] initialValue)
-  {
-    value = initialValue;
-  }
-
-  public void _read (org.omg.CORBA.portable.InputStream i)
-  {
-    value = com.example.democorba.service.BytesDataHelper.read (i);
-  }
-
-  public void _write (org.omg.CORBA.portable.OutputStream o)
-  {
-    com.example.democorba.service.BytesDataHelper.write (o, value);
-  }
-
-  public org.omg.CORBA.TypeCode _type ()
-  {
-    return com.example.democorba.service.BytesDataHelper.type ();
-  }
-
+	public BytesDataHolder ()
+	{
+	}
+	public BytesDataHolder (final byte[] initial)
+	{
+		value = initial;
+	}
+	public org.omg.CORBA.TypeCode _type ()
+	{
+		return BytesDataHelper.type ();
+	}
+	public void _read (final org.omg.CORBA.portable.InputStream in)
+	{
+		value = BytesDataHelper.read (in);
+	}
+	public void _write (final org.omg.CORBA.portable.OutputStream out)
+	{
+		BytesDataHelper.write (out,value);
+	}
 }

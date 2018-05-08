@@ -2,14 +2,16 @@ package com.example.democorba.service;
 
 
 /**
-* com/example/democorba/service/GreetingServiceOperations.java .
-* IDL-to-Javaコンパイラ(ポータブル)、バージョン"3.2"によって生成されました
-* /Users/shimizukazuki/git-me/democorba/src/main/resources/GreetingService.idlから
-* 2018年5月8日 22時51分33秒 JST
-*/
+ * Generated from IDL interface "GreetingService".
+ *
+ * @author JacORB IDL compiler V 3.9
+ * @version generated at 2018/05/08 23:09:57
+ */
 
-public interface GreetingServiceOperations 
+public interface GreetingServiceOperations
 {
-  String hello (String message);
-  void execute (byte[] request, com.example.democorba.service.BytesDataHolder response);
-} // interface GreetingServiceOperations
+	/* constants */
+	/* operations  */
+	java.lang.String hello(java.lang.String message);
+	void execute(byte[] request, com.example.democorba.service.BytesDataHolder response);
+}

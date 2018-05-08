@@ -1,60 +1,74 @@
 package com.example.democorba.service;
 
-
 /**
-* com/example/democorba/service/BytesDataHelper.java .
-* IDL-to-Javaコンパイラ(ポータブル)、バージョン"3.2"によって生成されました
-* /Users/shimizukazuki/git-me/democorba/src/main/resources/GreetingService.idlから
-* 2018年5月8日 22時51分33秒 JST
-*/
+ * Generated from IDL alias "BytesData".
+ *
+ * @author JacORB IDL compiler V 3.9
+ * @version generated at 2018/05/08 23:09:57
+ */
 
-abstract public class BytesDataHelper
+public abstract class BytesDataHelper
 {
-  private static String  _id = "IDL:com/example/democorba/service/BytesData:1.0";
+	private volatile static org.omg.CORBA.TypeCode _type;
 
-  public static void insert (org.omg.CORBA.Any a, byte[] that)
-  {
-    org.omg.CORBA.portable.OutputStream out = a.create_output_stream ();
-    a.type (type ());
-    write (out, that);
-    a.read_value (out.create_input_stream (), type ());
-  }
+	public static void insert (org.omg.CORBA.Any any, byte[] s)
+	{
+		any.type (type ());
+		write (any.create_output_stream (), s);
+	}
 
-  public static byte[] extract (org.omg.CORBA.Any a)
-  {
-    return read (a.create_input_stream ());
-  }
+	public static byte[] extract (final org.omg.CORBA.Any any)
+	{
+		if ( any.type().kind() == org.omg.CORBA.TCKind.tk_null)
+		{
+			throw new org.omg.CORBA.BAD_OPERATION ("Can't extract from Any with null type.");
+		}
+		return read (any.create_input_stream ());
+	}
 
-  private static org.omg.CORBA.TypeCode __typeCode = null;
-  synchronized public static org.omg.CORBA.TypeCode type ()
-  {
-    if (__typeCode == null)
-    {
-      __typeCode = org.omg.CORBA.ORB.init ().get_primitive_tc (org.omg.CORBA.TCKind.tk_octet);
-      __typeCode = org.omg.CORBA.ORB.init ().create_sequence_tc (0, __typeCode);
-      __typeCode = org.omg.CORBA.ORB.init ().create_alias_tc (com.example.democorba.service.BytesDataHelper.id (), "BytesData", __typeCode);
-    }
-    return __typeCode;
-  }
+	public static org.omg.CORBA.TypeCode type ()
+	{
+		if (_type == null)
+		{
+			synchronized(BytesDataHelper.class)
+			{
+				if (_type == null)
+				{
+					_type = org.omg.CORBA.ORB.init().create_alias_tc(com.example.democorba.service.BytesDataHelper.id(), "BytesData",org.omg.CORBA.ORB.init().create_sequence_tc(0, org.omg.CORBA.ORB.init().get_primitive_tc(org.omg.CORBA.TCKind.from_int(10))));
+				}
+			}
+		}
+		return _type;
+	}
 
-  public static String id ()
-  {
-    return _id;
-  }
+	public static String id()
+	{
+		return "IDL:com/example/democorba/service/BytesData:1.0";
+	}
+	public static byte[] read (final org.omg.CORBA.portable.InputStream _in)
+	{
+		byte[] _result;
+		int _l_result0 = _in.read_long();
+		try
+		{
+			 int x = _in.available();
+			 if ( x > 0 && _l_result0 > x )
+				{
+					throw new org.omg.CORBA.MARSHAL("Sequence length too large. Only " + x + " available and trying to assign " + _l_result0);
+				}
+		}
+		catch (java.io.IOException e)
+		{
+		}
+		_result = new byte[_l_result0];
+		_in.read_octet_array(_result,0,_l_result0);
+		return _result;
+	}
 
-  public static byte[] read (org.omg.CORBA.portable.InputStream istream)
-  {
-    byte value[] = null;
-    int _len0 = istream.read_long ();
-    value = new byte[_len0];
-    istream.read_octet_array (value, 0, _len0);
-    return value;
-  }
-
-  public static void write (org.omg.CORBA.portable.OutputStream ostream, byte[] value)
-  {
-    ostream.write_long (value.length);
-    ostream.write_octet_array (value, 0, value.length);
-  }
-
+	public static void write (final org.omg.CORBA.portable.OutputStream _out, byte[] _s)
+	{
+		
+		_out.write_long(_s.length);
+		_out.write_octet_array(_s,0,_s.length);
+	}
 }

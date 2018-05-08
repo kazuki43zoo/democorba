@@ -1,10 +1,10 @@
 package com.example.democorba.server;
 
-import com.example.democorba.service.GreetingService_Tie;
+import com.example.democorba.service.GreetingService;
+import com.example.democorba.service.GreetingServicePOATie;
 import com.example.democorba.support.IorFileSupport;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
-import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.CosNaming.NamingContextPackage.CannotProceed;
@@ -12,8 +12,6 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
-import org.omg.PortableServer.POAPackage.ServantNotActive;
-import org.omg.PortableServer.POAPackage.WrongPolicy;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,18 +46,19 @@ public class GreetingServer {
 
     }
 
-    private static void bindService(String[] options) throws InvalidName, AdapterInactive, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed, IOException {
+    private static void bindService(String[] options) throws InvalidName, AdapterInactive, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed {
         ORB orb = ORB.init(options, null);
         POA poa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
         poa.the_POAManager().activate();
 
-        GreetingService_Tie greetingServiceTie = new GreetingService_Tie(new GreetingServiceImpl());
+        GreetingServicePOATie greetingServiceTie = new GreetingServicePOATie(new GreetingServiceImpl());
+        GreetingService greetingService = greetingServiceTie._this(orb);
 
         NamingContextExt namingContextRef =
                 NamingContextExtHelper.narrow(orb.resolve_initial_references("NameService"));
-        namingContextRef.rebind(namingContextRef.to_name("GreetingService"), greetingServiceTie);
+        namingContextRef.rebind(namingContextRef.to_name("GreetingService"), greetingService);
 
-        String ior = orb.object_to_string(greetingServiceTie);
+        String ior = orb.object_to_string(greetingService);
         IOR_FILE_SUPPORT.write(ior);
 
         System.out.println("GreetingService IOR: " + ior);
