@@ -1,7 +1,6 @@
 package com.example.democorba;
 
 import com.example.democorba.service.BytesDataHolder;
-import com.example.democorba.service.GreetingService;
 import com.example.democorba.service.GreetingServiceHelper;
 import com.example.democorba.service.GreetingServiceOperations;
 import com.example.democorba.support.IorFileSupport;
@@ -33,7 +32,7 @@ public class DemoCorbaApplication {
     }
 
     @Bean
-    CommandLineRunner demoUsingIorFile(GreetingService greetingServiceViaIorFile) {
+    CommandLineRunner demoUsingIorFile(GreetingServiceOperations greetingServiceViaIorFile) {
         return args -> callService(greetingServiceViaIorFile);
     }
 
@@ -58,7 +57,7 @@ public class DemoCorbaApplication {
         properties.put("java.naming.corba.orb", orb);
         factoryBean.setJndiEnvironment(properties);
         factoryBean.setJndiName("GreetingService");
-        factoryBean.setServiceInterface(GreetingService.class);
+        factoryBean.setServiceInterface(GreetingServiceOperations.class);
         return factoryBean;
     }
 
