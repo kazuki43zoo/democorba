@@ -1,5 +1,6 @@
 package com.example.democorba;
 
+import com.example.democorba.server.GreetingServer;
 import com.example.democorba.service.BytesDataHolder;
 import com.example.democorba.service.GreetingService;
 import com.example.democorba.service.GreetingServiceHelper;
@@ -19,7 +20,9 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 public class GreetingTest {
 
@@ -32,7 +35,17 @@ public class GreetingTest {
     private static ORB orb;
 
     @BeforeClass
-    public static void setupOrb() {
+    public static void setupOrb() throws InterruptedException {
+        new Thread(()-> {
+            try {
+                GreetingServer.main(new String[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+        TimeUnit.SECONDS.sleep(2);
         orb = ORB.init(ORB_OPTIONS, null);
     }
 
@@ -41,6 +54,7 @@ public class GreetingTest {
         if (orb != null) {
             orb.destroy();
         }
+        GreetingServer.stop();
     }
 
     @Test

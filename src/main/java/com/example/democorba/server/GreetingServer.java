@@ -22,17 +22,17 @@ public class GreetingServer {
 
     private static final String[] ORB_OPTIONS = new String[]{"-ORBInitialPort", "1050", "-ORBInitialHost", "localhost"};
     private static final IorFileSupport IOR_FILE_SUPPORT = new IorFileSupport();
-
+    private static Process orbdProcess;
     public static void main(String args[]) throws IOException, InterruptedException {
 
         List<String> orbdStartupCommands = new ArrayList<>();
         orbdStartupCommands.add("orbd");
         orbdStartupCommands.addAll(Arrays.asList(ORB_OPTIONS));
 
-        Process orbdProcess = new ProcessBuilder(orbdStartupCommands).start();
+        orbdProcess = new ProcessBuilder(orbdStartupCommands).start();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("GreetingService Exiting ...");
-            orbdProcess.destroy();
+            stop();
         }));
 
         TimeUnit.SECONDS.sleep(1);
@@ -43,6 +43,12 @@ public class GreetingServer {
             e.printStackTrace();
         }
 
+    }
+
+    public static void stop() {
+        if (orbdProcess != null) {
+            orbdProcess.destroy();
+        }
     }
 
     private static void bindService(String[] options) throws InvalidName, AdapterInactive, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, CannotProceed {
