@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GreetingTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DemoCorbaApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GreetingTest.class);
 
     private static final String[] ORB_OPTIONS = new String[]{"-ORBInitialPort", "1050", "-ORBInitialHost", "localhost"};
 
@@ -45,7 +45,7 @@ public class GreetingTest {
                 Thread.currentThread().interrupt();
             }
         }).start();
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(3);
         orb = ORB.init(ORB_OPTIONS, null);
     }
 

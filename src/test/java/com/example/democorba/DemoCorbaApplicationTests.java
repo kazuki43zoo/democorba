@@ -33,7 +33,7 @@ public class DemoCorbaApplicationTests {
 				Thread.currentThread().interrupt();
 			}
 		}).start();
-		TimeUnit.SECONDS.sleep(2);
+		TimeUnit.SECONDS.sleep(3);
 	}
 
 	@AfterClass
